@@ -1,0 +1,9 @@
+[submodule "services/judgend"]
+	path = services/judgend
+	url = git@github.com:SEUAIG/seuoj-judgend.git
+[submodule "services/backend"]
+	path = services/backend
+	url = git@github.com:SEUAIG/seuoj-backend.git
+[submodule "services/frontend"]
+	path = services/frontend
+	url = git@github.com:SEUAIG/seuoj-frontend.git
