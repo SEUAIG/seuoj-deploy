@@ -1,0 +1,56 @@
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - MYSQL_DATABASE=seuoj
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./data/init:/docker-entrypoint-initdb.d/:ro
+
+  # 后端服务
+  backend:
+    build: ./services/backend
+    environment:
+      # 应用配置
+      - SPRING_APPLICATION_NAME=seuoj-backend
+      # 数据库配置
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/seuoj?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=${DB_ROOT_PASSWORD}
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+
+      # MyBatis Plus 配置
+      - MYBATIS_PLUS_CONFIGURATION_MAP_UNDERSCORE_TO_CAMEL_CASE=true
+      - MYBATIS_PLUS_GLOBAL_CONFIG_DB_CONFIG_LOGIC_DELETE_FIELD=is_del
+      - MYBATIS_PLUS_GLOBAL_CONFIG_DB_CONFIG_LOGIC_DELETE_VALUE=1
+      - MYBATIS_PLUS_GLOBAL_CONFIG_DB_CONFIG_LOGIC_NOT_DELETE_VALUE=0
+      - MYBATIS_PLUS_MAPPER_LOCATIONS=classpath:/mapper/**/*.xml
+      - MYBATIS_PLUS_LOG_IMPL=org.apache.ibatis.logging.stdout.StdOutImpl
+      # JWT 配置
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION=86400
+      # 评测服务配置
+      - JUDGE_SERVER_URL=http://judgend:9090
+      - JUDGE_SECRET=${JUDGE_SECRET}
+    depends_on:
+      - mysql
+
+  # 判题服务
+  judgend:
+    build: ./services/judgend
+    # 判题端不需要暴露端口到外部，仅内部互访
+    environment:
+      - AIJ_MAX_CONCURRENT_REQUESTS=${JUDGEND_MAX_CONCURRENT_REQUESTS}
+      - AIJ_BACKEND_HOST=backend
+      - AIJ_SAVE_SUBMISSIONS=true
+      - AIJ_OUTPUT_TRUNCATE_LENGTH=${JUDGEND_OUTPUT_TRUNCATE_LENGTH}
+    volumes:
+      - ./data/judgend:/app/assets
+  # 前端 + Nginx
+  frontend:
+    build: ./services/frontend
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "28080:80"
