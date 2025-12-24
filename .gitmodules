@@ -1,6 +1,7 @@
 [submodule "services/judgend"]
 	path = services/judgend
 	url = git@github.com:SEUAIG/seuoj-judgend.git
+	branch = dev
 [submodule "services/backend"]
 	path = services/backend
 	url = git@github.com:SEUAIG/seuoj-backend.git

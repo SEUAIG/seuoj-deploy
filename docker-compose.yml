@@ -14,6 +14,9 @@ services:
     environment:
       # 应用配置
       - SPRING_APPLICATION_NAME=seuoj-backend
+      - LOGGING_FILE_NAME=/app/log/backend.log
+      - LOGGING_LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE=10MB
+      - LOGGING_LOGBACK_ROLLINGPOLICY_MAX_HISTORY=7
       # 数据库配置
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/seuoj?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=root
@@ -35,7 +38,8 @@ services:
       - JUDGE_SECRET=${JUDGE_SECRET}
     depends_on:
       - mysql
-
+    volumes:
+      - ./data/backend:/app/log
   # 判题服务
   judgend:
     build: ./services/judgend
@@ -46,7 +50,7 @@ services:
       - AIJ_SAVE_SUBMISSIONS=true
       - AIJ_OUTPUT_TRUNCATE_LENGTH=${JUDGEND_OUTPUT_TRUNCATE_LENGTH}
     volumes:
-      - ./data/judgend:/app/assets
+      - ./services/judgend/assets:/app/assets
   # 前端 + Nginx
   frontend:
     build: ./services/frontend
