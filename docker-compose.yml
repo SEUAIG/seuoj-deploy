@@ -26,16 +26,26 @@ services:
     environment:
       # 应用配置
       - SPRING_APPLICATION_NAME=seuoj-backend
+      - SPRING_PROFILES_ACTIVE=dev
       - LOGGING_FILE_NAME=/app/log/backend.log
       - LOGGING_LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE=10MB
       - LOGGING_LOGBACK_ROLLINGPOLICY_MAX_HISTORY=7
+      - SPRING_JACKSON_TIME_ZONE=Asia/Shanghai
+      - SPRING_JACKSON_DATE_FORMAT=yyyy-MM-dd HH:mm:ss
       # 数据库配置
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/seuoj?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/seuoj?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=${DB_ROOT_PASSWORD}
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+      # 邮件配置
+      - SPRING_MAIL_HOST=smtp.qq.com
+      - SPRING_MAIL_PORT=465
+      - SPRING_MAIL_USERNAME=${MAIL_USERNAME}
+      - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
+      - SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE=true
       # 代码存储配置
-      - STORAGE_USER_CODE_STORAGE_PATH=/app/data/usercode
+      - STORAGE_USER_CODE_STORAGE_PATH=/app/data/user-code
       # MyBatis Plus 配置
       - MYBATIS_PLUS_CONFIGURATION_MAP_UNDERSCORE_TO_CAMEL_CASE=true
       - MYBATIS_PLUS_GLOBAL_CONFIG_DB_CONFIG_LOGIC_DELETE_FIELD=is_del
@@ -49,6 +59,19 @@ services:
       # 评测服务配置
       - JUDGE_SERVER_URL=http://judgend:9090
       - JUDGE_SECRET=${JUDGE_SECRET}
+      # 评测服务测试用例配置
+      - PROBLEM_TESTCASE_MAX_ARCHIVE_SIZE=52428800
+      - PROBLEM_TESTCASE_MAX_ENTRY_COUNT=200
+      - PROBLEM_TESTCASE_MAX_ENTRY_SIZE=5242880
+      - PROBLEM_TESTCASE_MAX_TOTAL_SIZE=209715200
+      - PROBLEM_TESTCASE_MAX_COMPRESSION_RATIO=50
+      - PROBLEM_TESTCASE_MAX_TEXT_SIZE=5242880
+      - PROBLEM_TESTCASE_MAX_LINE_LENGTH=200000
+      # 验证码配置
+      - VERIFICATION_CODE_EXPIRE_SECONDS=300
+      - VERIFICATION_SEND_INTERVAL_SECONDS=60
+      - VERIFICATION_CACHE_MAX_SIZE=10000
+      - VERIFICATION_MAX_VERIFY_FAILS=5
     depends_on:
       - mysql
     volumes:
