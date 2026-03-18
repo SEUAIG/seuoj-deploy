@@ -19,6 +19,7 @@ services:
     volumes:
       - ./data/mysql:/var/lib/mysql
       - ./data/init:/docker-entrypoint-initdb.d/:ro
+      - ./data/init/my.cnf:/etc/mysql/conf.d/my.cnf:ro
 
   # 后端服务
   backend:
