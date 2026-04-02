@@ -78,10 +78,13 @@ services:
     volumes:
       - ./data/backend/log:/app/log
       - ./data/backend/data:/app/data
-  
+
   # 前端 + Nginx
   frontend:
     build: ./services/frontend
+    depends_on:
+      - backend
+      - judgend
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
     ports:
