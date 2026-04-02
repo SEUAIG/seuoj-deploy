@@ -5,6 +5,8 @@
 [submodule "services/backend"]
 	path = services/backend
 	url = git@github.com:SEUAIG/seuoj-backend.git
+	branch = master
 [submodule "services/frontend"]
 	path = services/frontend
 	url = git@github.com:SEUAIG/seuoj-frontend.git
+	branch = main
