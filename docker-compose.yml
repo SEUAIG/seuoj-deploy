@@ -6,7 +6,6 @@ services:
     environment:
       - AIJ_MAX_CONCURRENT_REQUESTS=${JUDGEND_MAX_CONCURRENT_REQUESTS}
       - AIJ_BACKEND_HOST=backend
-      - AIJ_SAVE_SUBMISSIONS=true
       - AIJ_OUTPUT_TRUNCATE_LENGTH=${JUDGEND_OUTPUT_TRUNCATE_LENGTH}
     volumes:
       - ./services/judgend/assets:/app/assets

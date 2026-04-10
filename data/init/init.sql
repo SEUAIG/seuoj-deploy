@@ -715,3 +715,5 @@ INSERT INTO `class_contest_rel` (`id`, `class_id`, `contest_id`, `is_del`)
 VALUES (1, 1, 1, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+UPDATE `problem` SET `is_del` = 1 WHERE `id` >= 3;
