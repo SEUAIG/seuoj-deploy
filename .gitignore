@@ -2,3 +2,4 @@ data/mysql/**/*
 data/judgend/**/*
 data/backend/**/*
 .env
+.codex

@@ -1,123 +1,108 @@
 # SEUOJ 部署仓库
 
-本仓库使用 Docker Compose 编排并一键部署 SEUOJ 的完整服务栈：`MySQL` 数据库、`后端`（Spring Boot）、`判题端 Judgend`（Rust）、`前端 + Nginx`。开箱即用，专注于稳定运行与易维护。
+本仓库使用 Docker Compose 编排并部署 SEUOJ 的完整服务栈：`MySQL`、`backend`（Spring Boot）、`judgend`（Rust 判题端）、`frontend`（Vite 构建 + Nginx 托管）。
 
----
+## 服务架构
+- `mysql`：`mysql:8.0`，初始化脚本来自 `data/init`
+- `backend`：Spring Boot 服务（容器内 `8080`），依赖 `mysql` 与 `judgend`
+- `judgend`：评测服务（容器内 `9090`），仅内部网络访问
+- `frontend`：Nginx 提供静态资源并反代 `/api` 到 `backend`
 
-## 架构概览
-- **数据库**: `mysql:8.0`，初始化脚本来自 [data/init](data/init)，数据持久化到 [data/mysql](data/mysql)
-- **后端**: Spring Boot 服务，日志落地到 [data/backend](data/backend)，通过环境变量配置数据库与判题端
-- **判题端**: `judgend` 服务，资产目录挂载 [services/judgend/assets](services/judgend/assets)（题目、日志）
-- **前端 + Nginx**: 构建产物由 Nginx 提供，外部暴露 `80` 端口；Nginx 反向代理后端 API（详见 [nginx/default.conf](nginx/default.conf)）
-
-服务编排见 [docker-compose.yml](docker-compose.yml)，全局环境变量见 [.env](.env)。
-
----
+服务定义见 `docker-compose.yml`，Nginx 配置见 `nginx/default.conf`。
 
 ## 快速开始
 
-### 先决条件
-- 已安装 `Docker`（建议 20+）与 `Docker Compose v2`（`docker compose` 命令）
-
-### 启动步骤
-1. 编辑 [.env](.env)，至少修改：
-   - `DB_ROOT_PASSWORD`：数据库 root 密码
-   - `JWT_SECRET`：JWT 签名密钥（务必设置为高强度随机串）
-   - `JUDGE_SECRET`：后端与判题端之间的共享密钥（需一致）
-2. 启动服务（首次启动会自动初始化数据库与镜像构建）：
+### 1) 准备子模块
+本仓库的 `services/*` 是 Git Submodule，首次拉取后需初始化：
 
 ```bash
-# 后台启动并构建镜像
-docker compose up -d --build
+git submodule update --init --recursive
+```
 
-# 查看整体日志（可选）
+### 2) 准备环境变量
+复制模板并按需修改：
+
+```bash
+cp .env.example .env
+```
+
+至少确认以下变量：
+- `DB_ROOT_PASSWORD`
+- `JWT_PRIVATE_KEY`
+- `JWT_PUBLIC_KEY`
+- `JWT_ACCESS_EXPIRATION`
+- `JWT_TEMP_EXPIRATION`
+- `JUDGE_SECRET`
+- `MAIL_USERNAME`
+- `MAIL_PASSWORD`
+- `JUDGEND_MAX_CONCURRENT_REQUESTS`
+- `JUDGEND_OUTPUT_TRUNCATE_LENGTH`
+- `VERIFICATION_DEV_FIXED_CODE_ENABLED`
+- `VERIFICATION_DEV_FIXED_CODE`
+
+### 3) 启动
+
+```bash
+docker compose up -d --build
+```
+
+查看日志：
+
+```bash
 docker compose logs -f
 ```
 
-3. 访问前端：
-   - 打开浏览器访问 `http://localhost:80`
+### 4) 访问
+- 前端入口：`http://localhost:2280`
+- API 入口：`http://localhost:2280/api/*`
 
-> 说明：后端与判题端无需对外暴露端口，均通过内部网络互通；Nginx 负责对外提供前端并代理后端 API。
+说明：`backend` 与 `judgend` 默认不对宿主机暴露端口，通过 Docker 内部网络通信。
 
----
-
-## 环境变量（.env）
-- **`DB_ROOT_PASSWORD`**: MySQL root 密码；后端用该密码连接数据库。
-- **`JWT_SECRET`**: 后端 JWT 签名密钥；用于签发与校验令牌。
-- **`JUDGE_SECRET`**: 后端与判题端共享密钥；不一致会导致判题请求拒绝。
-- **`JUDGEND_MAX_CONCURRENT_REQUESTS`**: 判题端最大并发评测数。
-- **`JUDGEND_OUTPUT_TRUNCATE_LENGTH`**: 评测输出截断长度。
-
-后端数据库与 MyBatis、JWT、判题端等配置通过 compose 中的环境变量传入，详见 [docker-compose.yml](docker-compose.yml)。
-
----
-
-## 数据与持久化
-- **数据库数据**: 映射到宿主机 [data/mysql](data/mysql)
-- **数据库初始化脚本**: 放置于 [data/init](data/init)，容器首次启动时自动执行（例如 `init.sql`）
-- **后端日志**: 输出至 [data/backend](data/backend)
-- **判题端资产**: 题目与日志位于 [services/judgend/assets](services/judgend/assets)
-
-> 若需「清空数据库并重建」：先停止服务，再备份或删除 `data/mysql` 目录后重新 `up`。
-
----
+## 数据与挂载目录
+- 数据库数据：`data/mysql`
+- 数据库初始化脚本：`data/init`
+- 后端日志：`data/backend/log`
+- 后端数据（如提交代码存储）：`data/backend/data`
+- 判题资源目录（题目、测试数据、日志等）：`services/judgend/assets`
 
 ## 常用命令
+
 ```bash
-# 启动（后台）
+# 后台启动
 docker compose up -d
 
-# 首次或修改 Dockerfile 后建议带构建
+# 重建并启动
 docker compose up -d --build
 
 # 停止并移除容器
 docker compose down
 
+# 仅看某个服务日志
+docker compose logs -f backend
+docker compose logs -f judgend
+docker compose logs -f frontend
+
 # 重启某个服务
 docker compose restart backend
-
-# 查看指定服务日志
-docker compose logs -f backend
-
-docker compose logs -f judgend
 
 # 进入 MySQL 客户端
 docker compose exec mysql mysql -uroot -p
 
-# 仅重新构建指定服务
+# 单独重建某个服务
 docker compose build frontend
 ```
 
----
+## 目录结构
+- `docker-compose.yml`：服务编排与环境变量注入
+- `nginx/default.conf`：Nginx 静态托管与反向代理配置
+- `data/init`：MySQL 初始化脚本和配置
+- `data/mysql`：MySQL 持久化数据
+- `data/backend`：后端日志与业务数据
+- `services/backend`：后端源码与镜像构建上下文
+- `services/frontend`：前端源码与镜像构建上下文
+- `services/judgend`：判题端源码与镜像构建上下文
 
-## 端口与访问
-- **前端**: `http://localhost:80`
-- **后端**: 仅容器内访问，由 Nginx 或判题端通过 Docker 网络调用
-- **判题端**: 不对外暴露端口，内部监听 `9090`
-
----
-
-## 目录结构速览
-- [docker-compose.yml](docker-compose.yml): 服务编排与环境变量注入
-- [data/mysql](data/mysql): MySQL 持久化数据目录
-- [data/init](data/init): MySQL 初始化脚本目录（如 `init.sql`）
-- [data/backend](data/backend): 后端日志输出目录
-- [nginx/default.conf](nginx/default.conf): Nginx 站点与反向代理配置
-- [services/backend](services/backend): 后端工程与镜像构建上下文
-- [services/frontend](services/frontend): 前端工程与镜像构建上下文
-- [services/judgend](services/judgend): 判题端工程与镜像构建上下文
-
----
-
-## 运维与开发建议
-- **修改配置**: 优先通过 [.env](.env) 与 [docker-compose.yml](docker-compose.yml) 管理；避免在容器内改动。
-- **变更代码后重启**:
-
-```bash
-# 变更任一服务代码后
-docker compose build backend frontend judgend
-
-docker compose up -d
-```
-
-- **题目与日志管理**: 将题面与测试数据放在 [services/judgend/assets](services/judgend/assets) 下；注意容量与备份。
+## 运维提示
+- 修改配置优先更新 `.env` 与 `docker-compose.yml`，避免在容器内手改。
+- 代码更新后建议重新构建对应服务镜像。
+- 如需重建数据库，先备份后清理 `data/mysql` 再执行 `docker compose up -d --build`。
