@@ -54,8 +54,10 @@ services:
       - MYBATIS_PLUS_MAPPER_LOCATIONS=classpath:/mapper/**/*.xml
       - MYBATIS_PLUS_LOG_IMPL=org.apache.ibatis.logging.stdout.StdOutImpl
       # JWT 配置
-      - JWT_SECRET=${JWT_SECRET}
-      - JWT_EXPIRATION=86400
+      - JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
+      - JWT_PUBLIC_KEY=${JWT_PUBLIC_KEY}
+      - JWT_ACCESS_EXPIRATION=${JWT_ACCESS_EXPIRATION}
+      - JWT_TEMP_EXPIRATION=${JWT_TEMP_EXPIRATION}
       # 评测服务配置
       - JUDGE_SERVER_URL=http://judgend:9090
       - JUDGE_SECRET=${JUDGE_SECRET}
