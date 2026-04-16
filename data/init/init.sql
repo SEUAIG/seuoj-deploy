@@ -549,9 +549,9 @@ SET FOREIGN_KEY_CHECKS = 1;
 SET FOREIGN_KEY_CHECKS = 0;
 
 INSERT INTO `problem` (id, pid, title, total_submit, total_accept, is_public)
-VALUES (1, 'p01', 'a+b', 0, 0, 1),
-       (2, 'p02', '数组求和', 0, 0, 1),
-       (3, 'p03', '最大子数组和', 0, 0, 1),
+VALUES (1, 'test01', 'a+b', 0, 0, 1),
+       (2, 'test02', '数组求和', 0, 0, 1),
+       (3, 'test03', '最大子数组和', 0, 0, 1),
        (4, 'p04', '两数之和', 0, 0, 1),
        (5, 'p05', '二分查找', 0, 0, 1),
        (6, 'p06', '合并区间', 0, 0, 1),
@@ -716,4 +716,4 @@ VALUES (1, 1, 1, 0);
 
 SET FOREIGN_KEY_CHECKS = 1;
 
-UPDATE `problem` SET `is_del` = 1 WHERE `id` >= 3;
+UPDATE `problem` SET `is_del` = 1 WHERE `id` >= 4;
