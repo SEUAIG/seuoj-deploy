@@ -22,7 +22,8 @@
 ### 启动步骤
 1. 编辑 [.env](.env)，至少修改：
    - `DB_ROOT_PASSWORD`：数据库 root 密码
-   - `JWT_SECRET`：JWT 签名密钥（务必设置为高强度随机串）
+   - `JWT_PRIVATE_KEY`：JWT 私钥（Base64 编码）
+   - `JWT_PUBLIC_KEY`：JWT 公钥（Base64 编码）
    - `JUDGE_SECRET`：后端与判题端之间的共享密钥（需一致）
 2. 启动服务（首次启动会自动初始化数据库与镜像构建）：
 
@@ -43,7 +44,8 @@ docker compose logs -f
 
 ## 环境变量（.env）
 - **`DB_ROOT_PASSWORD`**: MySQL root 密码；后端用该密码连接数据库。
-- **`JWT_SECRET`**: 后端 JWT 签名密钥；用于签发与校验令牌。
+- **`JWT_PRIVATE_KEY`**: 后端 JWT 私钥（Base64）；用于签发令牌。
+- **`JWT_PUBLIC_KEY`**: 后端 JWT 公钥（Base64）；用于校验令牌。
 - **`JUDGE_SECRET`**: 后端与判题端共享密钥；不一致会导致判题请求拒绝。
 - **`JUDGEND_MAX_CONCURRENT_REQUESTS`**: 判题端最大并发评测数。
 - **`JUDGEND_OUTPUT_TRUNCATE_LENGTH`**: 评测输出截断长度。
