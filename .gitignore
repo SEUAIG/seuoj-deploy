@@ -3,3 +3,5 @@ data/judgend/**/*
 data/backend/**/*
 .env
 .codex
+agent_config.yaml
+data/agent
