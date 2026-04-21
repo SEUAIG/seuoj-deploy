@@ -11,5 +11,5 @@
 	url = git@github.com:SEUAIG/seuoj-frontend.git
 	branch = main
 [submodule "services/seuoj-qa"]
-	path = service/seuoj-qa
+	path = services/seuoj-qa
 	url = git@github.com:SEUAIG/seuoj-qa.git

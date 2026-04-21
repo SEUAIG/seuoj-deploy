@@ -8,7 +8,7 @@ services:
       - AIJ_BACKEND_HOST=backend
       - AIJ_OUTPUT_TRUNCATE_LENGTH=${JUDGEND_OUTPUT_TRUNCATE_LENGTH}
     volumes:
-      - ./services/judgend/assets:/app/assets
+      - ./data/judgend:/app/assets
     # Agent
   agentend:
     build: ./services/seuoj-qa
