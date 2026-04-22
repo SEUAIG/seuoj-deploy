@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ASSET_SRC="services/judgend/assets"
+ASSET_SRC="data/judgend-seed"
 ASSET_DST="data/judgend"
 
 echo "📦 拷贝开发资源..."
