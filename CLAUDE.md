@@ -1,0 +1,130 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Project Overview
+
+SEUOJ is a multi-service Online Judge system for Southeast University. This is the **deployment orchestration repo** — the four services live in Git submodules under `services/`. All inter-service communication is HTTP REST over a Docker bridge network; only Nginx (port 2280) is exposed to the host.
+
+## Common Commands
+
+```bash
+# First-time setup
+git submodule update --init --recursive
+cp .env.example .env   # then edit .env
+# also create agent_config.yaml from services/seuoj-qa/config/example.yaml
+
+# Start everything (builds + runs all containers)
+make run            # or: docker compose up -d --build
+
+# Dev start (copies judgend sample test data first)
+make dev_run
+
+# Stop
+make down
+
+# Logs
+docker compose logs -f backend
+docker compose logs -f judgend
+
+# Rebuild a single service
+docker compose build backend && docker compose up -d backend
+
+# MySQL shell
+docker compose exec mysql mysql -uroot -p
+
+# Clean all data (interactive confirm, uses sudo)
+make clean_data
+```
+
+### Per-submodule development
+
+**Backend** (Java 21, Spring Boot 3.2, Maven):
+```bash
+cd services/backend
+./mvnw clean package -DskipTests          # build JAR
+./mvnw test                                # all tests (needs local MySQL + test config)
+./mvnw test -Dtest=AuthzIntegrationTest    # single test class
+```
+Tests require a local MySQL with the `seuoj` schema loaded. Copy `src/test/resources/application-test.yml.template` to `application-test.yml` and set `TEST_DB_USERNAME`/`TEST_DB_PASSWORD`.
+
+**Frontend** (React 18, TypeScript 5.6, Vite 5):
+```bash
+cd services/frontend
+npm install
+npm run dev       # dev server on 0.0.0.0:5173
+npm run build     # tsc + vite build
+npm run lint      # eslint
+```
+
+**Judgend** (Rust, Axum 0.8):
+```bash
+cd services/judgend
+cargo build --release
+cargo test                          # all tests
+cargo test submission               # single test module
+```
+Requires `libseccomp-dev` on Linux and the language toolchains (gcc, python3, javac, node, go) to be in PATH.
+
+**Agentend** (Python 3.10, FastAPI):
+```bash
+cd services/seuoj-qa
+pip install -r requirements.txt
+uvicorn src.api_server:app --host 0.0.0.0 --port 8002
+```
+
+## Architecture
+
+```
+Browser :2280 ──> Nginx (frontend container)
+                    ├── /           static SPA files
+                    ├── /api/*  ──> backend:8080   (Spring Boot)
+                    └── /agent/* ─> agentend:8002  (FastAPI)
+
+backend:8080 ──> mysql:3306      (database)
+             ──> judgend:9090     (submit for judging)
+judgend:9090 ──> backend:8080     (PUT judge result callback)
+```
+
+### Submodule responsibilities
+
+| Submodule | Tech | Role |
+|-----------|------|------|
+| `services/backend` | Java 21 / Spring Boot / MyBatis-Plus | REST API, auth (JWT Ed25519), business logic, MySQL access |
+| `services/frontend` | React / TypeScript / Vite / Tailwind / Redux | SPA with Monaco editor, Markdown+KaTeX rendering |
+| `services/judgend` | Rust / Axum / Tokio | Async code judging with Seccomp sandbox, supports C/C++/Python/Java/Go/Node |
+| `services/seuoj-qa` | Python / FastAPI / FAISS / Camel-AI | RAG-based AI QA, knowledge graph, lesson preparation |
+
+### Key backend patterns
+
+- **Auth**: `JwtAuthInterceptor` extracts JWT → `UserContextHolder` (ThreadLocal). `AuthAspect` (AOP) checks `@RequireRole` / `@AllowAnonymous` annotations on controllers.
+- **Roles**: `USER`, `TEACHER`, `ADMIN`, `SUPER_ADMIN` in `RoleType` enum. Role checks in service layer via `UserRoleService.isAdmin()` / `.isTeacher()`.
+- **Resource access**: `ProblemAccessService` centralizes problem visibility logic across three contexts (DIRECT / CONTEST / PROBLEM_SET). Other resources (class, problem_set) have inline access checks in their services.
+- **Soft delete**: All tables use `is_del` field. MyBatis-Plus handles this globally. Generated `active_*` columns enforce unique constraints only on non-deleted rows.
+- **Entity convention**: Internal `id` (auto-increment) + `public_id` (UUID) for external APIs. Timestamps: `created_at` / `updated_at`.
+
+### Judging flow
+
+1. Backend receives submission → writes to DB (PENDING) → POST to judgend
+2. Judgend returns 202 immediately, judges async (semaphore-limited concurrency)
+3. Compile → run each test case in Seccomp sandbox → check output (standard/special/interactive)
+4. PUT result back to backend callback endpoint → DB updated to FINISHED
+
+### Data storage split
+
+- **MySQL** (`data/init/init.sql`): users, roles, problems metadata, submissions, contests, classes, tags
+- **Judgend filesystem** (`data/judgend/`): problem content (problem.json), test data, checker binaries
+- **Agentend** (`data/agent/`): FAISS indexes, knowledge graph JSON, SQLite chat DB
+
+## Submodule Git Branches
+
+| Submodule | Branch |
+|-----------|--------|
+| services/backend | master |
+| services/frontend | main |
+| services/judgend | dev |
+| services/seuoj-qa | (default) |
+
+## Environment
+
+All service configuration is injected via `.env` → `docker-compose.yml` environment variables. Key secrets: `DB_ROOT_PASSWORD`, `JWT_PRIVATE_KEY`, `JWT_PUBLIC_KEY`, `JUDGE_SECRET`, `MAIL_PASSWORD`. Dev mode has `VERIFICATION_DEV_FIXED_CODE_ENABLED=true` to bypass email verification.
