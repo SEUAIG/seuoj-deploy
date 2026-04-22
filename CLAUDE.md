@@ -101,7 +101,7 @@ judgend:9090 ──> backend:8080     (PUT judge result callback)
 - **Roles**: `USER`, `TEACHER`, `ADMIN`, `SUPER_ADMIN` in `RoleType` enum. Role checks in service layer via `UserRoleService.isAdmin()` / `.isTeacher()`.
 - **Resource access**: `ProblemAccessService` centralizes problem visibility logic across three contexts (DIRECT / CONTEST / PROBLEM_SET). Other resources (class, problem_set) have inline access checks in their services.
 - **Soft delete**: All tables use `is_del` field. MyBatis-Plus handles this globally. Generated `active_*` columns enforce unique constraints only on non-deleted rows.
-- **Entity convention**: Internal `id` (auto-increment) + `public_id` (UUID) for external APIs. Timestamps: `created_at` / `updated_at`.
+- **Entity convention**: External APIs expose `id` (auto-increment) directly. Timestamps: `created_at` / `updated_at`.
 
 ### Judging flow
 
