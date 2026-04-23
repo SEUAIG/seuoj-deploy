@@ -1,4 +1,4 @@
-.PHONY: ensure_dirs copy_dev_assets run run_dev
+.PHONY: ensure_dirs copy_dev_assets run dev_run
 
 NAME ?=
 
@@ -9,13 +9,16 @@ copy_dev_assets: ensure_dirs
 	bash ./scripts/copy_dev_assets.sh
 
 run: ensure_dirs
-	docker compose $(if $(NAME),-p $(NAME),) up -d --build
+	docker compose -f docker-compose.base.yml -f docker-compose.pro.yml $(if $(NAME),-p $(NAME),) up -d --build
 
 dev_run: copy_dev_assets
-	docker compose -f docker-compose.yml -f docker-compose.dev.yml $(if $(NAME),-p $(NAME),) up -d --build
+	docker compose -f docker-compose.base.yml -f docker-compose.dev.yml $(if $(NAME),-p $(NAME),) up -d --build
 
 clean_data:
 	bash ./scripts/clean_data.sh
 
 down:
-	docker compose $(if $(NAME),-p $(NAME),) down
+	docker compose -f docker-compose.base.yml -f docker-compose.pro.yml $(if $(NAME),-p $(NAME),) down
+
+dev_down:
+	docker compose -f docker-compose.base.yml -f docker-compose.dev.yml $(if $(NAME),-p $(NAME),) down

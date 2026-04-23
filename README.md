@@ -49,13 +49,7 @@ cp .env.example .env
 推荐使用：
 
 ```bash
-make run
-```
-
-等价命令：
-
-```bash
-docker compose up -d --build
+make run NAME=my_custom_ojname
 ```
 
 查看日志：
@@ -85,58 +79,36 @@ docker compose logs -f
 make ensure_dirs
 
 # 启动（默认）
-make run
+make run NAME=my_custom_ojname
 
-# 开发启动（会先拷贝 services/judgend/assets 到 data/judgend）
-make dev_run
+# 开发启动
+make dev_run NAME=my_custom_ojname
 
 # 停止
-make down
+make down NAME=my_custom_ojname
 
-# 清理数据目录（交互确认后删除 data/agent data/backend data/judgend data/mysql）
+# 开发停止
+make dev_down NAME=my_custom_ojname
+
+# 清理数据目录（交互确认后删除）
 make clean_data
-
-# 以下为原生 docker compose 命令
-
-# 重建并启动
-docker compose up -d --build
-
-# 停止并移除容器
-docker compose down
-
-# 仅看某个服务日志
-docker compose logs -f backend
-docker compose logs -f judgend
-docker compose logs -f frontend
-
-# 重启某个服务
-docker compose restart backend
-
-# 进入 MySQL 客户端
-docker compose exec mysql mysql -uroot -p
-
-# 单独重建某个服务
-docker compose build frontend
 ```
 
 ## 目录结构
-- `docker-compose.yml`：服务编排与环境变量注入
+- `docker-compose.base.yml`：服务编排与环境变量注入
+- `docker-compose.pro.yml`：生产环境覆盖，重定向数据目录到 `data/`
+- `docker-compose.dev.yml`：开发环境覆盖，重定向数据目录到 `data-dev/` 并添加种子数据挂载
 - `nginx/default.conf`：Nginx 静态托管与反向代理配置
 - `Makefile`：常用运维命令封装（`run`/`dev_run`/`down`/`clean_data`）
 - `scripts/ensure_dirs.sh`：检查配置并初始化 `data` 目录与 `aijlib`
 - `scripts/copy_dev_assets.sh`：开发环境题目资源拷贝
 - `scripts/clean_data.sh`：交互式清理数据目录
 - `data/init`：MySQL 初始化脚本和配置
-- `data/mysql`：MySQL 持久化数据
-- `data/backend`：后端日志与业务数据
-- `data/agent`：Agent 运行数据
-- `data/judgend`：判题资源与 `aijlib`
 - `services/backend`：后端源码与镜像构建上下文
 - `services/frontend`：前端源码与镜像构建上下文
 - `services/judgend`：判题端源码与镜像构建上下文
 - `services/seuoj-qa`：Agent 服务源码与镜像构建上下文
 
 ## 运维提示
-- 修改配置优先更新 `.env` 与 `docker-compose.yml`，避免在容器内手改。
+- 修改配置优先更新 `.env` 与 `docker-compose.base.yml`，避免在容器内手改。
 - 代码更新后建议重新构建对应服务镜像。
-- 如需重建数据库，先备份后清理 `data/mysql` 再执行 `docker compose up -d --build`。

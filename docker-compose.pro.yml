@@ -1,0 +1,28 @@
+# docker-compose.pro.yml
+# 生产环境覆盖文件，将所有运行时数据目录重定向到 data/
+# 通过 docker compose -f docker-compose.base.yml -f docker-compose.pro.yml 使用
+#
+# 与生产环境的区别：
+#   - 所有运行时数据存放在 data/ 而非 data-dev/，互不干扰
+services:
+  judgend:
+    volumes:
+      - ./data/judgend:/app/assets
+
+  agentend:
+    volumes:
+      - ./data/agent:/app/data
+
+  mysql:
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+  backend:
+    volumes:
+      - ./data/backend/log:/app/log
+      - ./data/backend/data:/app/data
+
+  frontend:
+    ports:
+      - "2280:80"
+      - "2443:443"
