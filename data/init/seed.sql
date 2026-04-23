@@ -131,8 +131,8 @@ VALUES (1, 1, 1, 1, 0),
        (2, 1, 2, 2, 0);
 
 -- 作业（替代原 class_problem_set_rel）
-INSERT INTO `assignment` (`id`, `class_id`, `problem_set_id`, `title`, `status`, `created_by_user_id`, `is_del`)
-VALUES (1, 1, 1, '基础练习作业', 'PUBLISHED', 3, 0);
+INSERT INTO `assignment` (`id`, `class_id`, `title`, `status`, `created_by_user_id`, `is_del`)
+VALUES (1, 1, '基础练习作业', 'PUBLISHED', 3, 0);
 
 INSERT INTO `class_contest_rel` (`id`, `class_id`, `contest_id`, `is_del`)
 VALUES (1, 1, 1, 0);
