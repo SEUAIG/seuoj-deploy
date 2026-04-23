@@ -1,11 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "📦 拷贝开发资源..."
+# 开发环境种子数据重置脚本
+# 每次 make dev_run 调用，将 seed 数据拷贝到 data-dev/ 并重置 MySQL 数据
+
+DEV_DATA="data-dev"
+
+echo "🔄 重置开发环境数据 ($DEV_DATA)..."
+
+# --- 重置 MySQL 数据（触发 init 脚本重新执行） ---
+MYSQL_DIR="$DEV_DATA/mysql"
+if [[ -d "$MYSQL_DIR" ]]; then
+  echo "🗑️  清空 MySQL 数据: $MYSQL_DIR"
+  rm -rf "$MYSQL_DIR"
+fi
+mkdir -p "$MYSQL_DIR"
+echo "✅ MySQL 数据目录已重置"
 
 # --- judgend 种子数据 ---
 JUDGE_SRC="data/judgend-seed"
-JUDGE_DST="data/judgend"
+JUDGE_DST="$DEV_DATA/judgend"
 
 if [[ ! -d "$JUDGE_SRC" ]]; then
   echo "❌ Error: $JUDGE_SRC 不存在"
@@ -23,7 +37,7 @@ fi
 
 # --- agentend 种子数据 ---
 AGENT_SRC="data/agent-seed"
-AGENT_DST="data/agent"
+AGENT_DST="$DEV_DATA/agent"
 
 if [[ -d "$AGENT_SRC" ]]; then
   mkdir -p "$AGENT_DST"
@@ -36,3 +50,5 @@ if [[ -d "$AGENT_SRC" ]]; then
 else
   echo "⚠️  $AGENT_SRC 不存在，跳过 agentend 种子数据拷贝"
 fi
+
+echo "🎉 开发环境数据重置完成"

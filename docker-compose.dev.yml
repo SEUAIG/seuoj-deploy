@@ -1,0 +1,33 @@
+# docker-compose.dev.yml
+# 开发/测试环境覆盖文件，将所有运行时数据目录重定向到 data-dev/
+# 通过 docker compose -f docker-compose.yml -f docker-compose.dev.yml 使用
+#
+# 与生产环境的区别：
+#   - 所有运行时数据存放在 data-dev/ 而非 data/，互不干扰
+#   - 每次 make dev_run 会清空 data-dev/mysql 以触发 MySQL 初始化脚本重新执行
+#   - 每次 make dev_run 会从种子数据重新拷贝 judgend 和 agentend 数据
+
+services:
+  judgend:
+    volumes:
+      - ./data-dev/judgend:/app/assets
+
+  agentend:
+    volumes:
+      - ./data-dev/agent:/app/data
+
+  mysql:
+    volumes:
+      - ./data-dev/mysql:/var/lib/mysql
+      - ./data/init:/docker-entrypoint-initdb.d/:ro
+      - ./data/init/my.cnf:/etc/mysql/conf.d/my.cnf:ro
+
+  backend:
+    volumes:
+      - ./data-dev/backend/log:/app/log
+      - ./data-dev/backend/data:/app/data
+
+  frontend:
+    ports:
+      - "2281:80"
+      - "8443:443"

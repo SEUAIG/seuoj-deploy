@@ -1,18 +1,33 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-TARGET_DIRS=(
+PROD_DIRS=(
   "data/agent"
   "data/backend"
   "data/judgend"
   "data/mysql"
 )
 
+DEV_DIRS=(
+  "data-dev/agent"
+  "data-dev/backend"
+  "data-dev/judgend"
+  "data-dev/mysql"
+)
+
 echo "⚠️  即将删除以下目录："
-for dir in "${TARGET_DIRS[@]}"; do
-  echo "  - $dir"
+echo ""
+echo "  生产环境:"
+for dir in "${PROD_DIRS[@]}"; do
+  echo "    - $dir"
+done
+echo ""
+echo "  开发环境:"
+for dir in "${DEV_DIRS[@]}"; do
+  echo "    - $dir"
 done
 
+echo ""
 read -p "确认删除？(y/N): " confirm
 
 if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
@@ -22,7 +37,7 @@ fi
 
 echo "🧹 开始清理..."
 
-for dir in "${TARGET_DIRS[@]}"; do
+for dir in "${PROD_DIRS[@]}" "${DEV_DIRS[@]}"; do
   if [[ -d "$dir" ]]; then
     echo "➡️  删除: $dir"
     sudo rm -rf "$dir"
