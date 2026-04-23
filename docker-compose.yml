@@ -23,7 +23,8 @@ services:
       - MYSQL_DATABASE=seuoj
     volumes:
       - ./data/mysql:/var/lib/mysql
-      - ./data/init:/docker-entrypoint-initdb.d/:ro
+      - ./services/backend/sql/database_schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./data/init/02-seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
       - ./data/init/my.cnf:/etc/mysql/conf.d/my.cnf:ro
 
   # 后端服务

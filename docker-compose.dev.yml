@@ -19,7 +19,13 @@ services:
   mysql:
     volumes:
       - ./data-dev/mysql:/var/lib/mysql
-      - ./data/init:/docker-entrypoint-initdb.d/:ro
+      - ./data/init-dev/02-seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
+      - ./data/init-dev/03-seed-problems.sql:/docker-entrypoint-initdb.d/03-seed-problems.sql:ro
+      - ./data/init-dev/04-seed-contests.sql:/docker-entrypoint-initdb.d/04-seed-contests.sql:ro
+      - ./data/init-dev/05-seed-classes.sql:/docker-entrypoint-initdb.d/05-seed-classes.sql:ro
+      - ./data/init-dev/06-seed-assignments.sql:/docker-entrypoint-initdb.d/06-seed-assignments.sql:ro
+      - ./data/init-dev/07-seed-problem-sets.sql:/docker-entrypoint-initdb.d/07-seed-problem-sets.sql:ro
+      - ./data/init-dev/08-seed-submissions.sql:/docker-entrypoint-initdb.d/08-seed-submissions.sql:ro
       - ./data/init/my.cnf:/etc/mysql/conf.d/my.cnf:ro
 
   backend:
