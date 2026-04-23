@@ -12,7 +12,7 @@ run: ensure_dirs
 	docker compose $(if $(NAME),-p $(NAME),) up -d --build
 
 dev_run: copy_dev_assets
-	docker compose $(if $(NAME),-p $(NAME),) up -d --build
+	docker compose -f docker-compose.yml -f docker-compose.dev.yml $(if $(NAME),-p $(NAME),) up -d --build
 
 clean_data:
 	bash ./scripts/clean_data.sh
