@@ -101,15 +101,15 @@ judgend:9090 ──> backend:8080     (PUT judge result callback)
 | Submodule | Tech | Role |
 |-----------|------|------|
 | `services/backend` | Java 21 / Spring Boot / MyBatis-Plus | REST API, auth (JWT Ed25519), business logic, MySQL access |
-| `services/frontend` | React / TypeScript / Vite / Tailwind / Redux | SPA with Monaco editor, Markdown+KaTeX rendering |
+| `services/frontend` | React / TypeScript / Vite / Tailwind / shadcn/ui / Redux + React Query | SPA with Monaco editor, Markdown+KaTeX rendering, recharts, dnd-kit |
 | `services/judgend` | Rust / Axum / Tokio | Async code judging with Seccomp sandbox, supports C/C++/Python/Java/Go/Node |
 | `services/seuoj-qa` | Python / FastAPI / FAISS / Camel-AI | RAG-based AI QA, knowledge graph, lesson preparation |
 
 ### Key backend patterns
 
 - **Auth**: `JwtAuthInterceptor` extracts JWT → `UserContextHolder` (ThreadLocal). `AuthAspect` (AOP) checks `@RequireRole` / `@AllowAnonymous` annotations on controllers.
-- **Roles**: `USER`, `TEACHER`, `ADMIN`, `SUPER_ADMIN` in `RoleType` enum. Role checks in service layer via `UserRoleService.isAdmin()` / `.isTeacher()`.
-- **Resource access**: `ProblemAccessService` centralizes problem visibility logic across three contexts (DIRECT / CONTEST / PROBLEM_SET). Other resources (class, problem_set) have inline access checks in their services.
+- **Roles**: `STUDENT`, `TEACHER`, `ADMIN`, `SUPER_ADMIN` in `RoleType` enum. Role checks in service layer via `UserRoleService.isAdmin()` / `.isTeacher()`.
+- **Resource access**: Problem visibility logic is distributed across `ProblemService`, `PermissionService`, and the `ProblemSourceType` enum, covering four contexts (DIRECT / CONTEST / PROBLEM_SET / ASSIGNMENT). Other resources (class, problem_set) have inline access checks in their services.
 - **Soft delete**: All tables use `is_del` field. MyBatis-Plus handles this globally. Generated `active_*` columns enforce unique constraints only on non-deleted rows.
 - **Entity convention**: External APIs expose `id` (auto-increment) directly. Timestamps: `created_at` / `updated_at`.
 
