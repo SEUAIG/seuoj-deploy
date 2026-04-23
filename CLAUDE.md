@@ -4,6 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 被指派任务时，在任务全部结束后，必须用中文报告 "所有任务已经完成"
 
+使用 uv 管理 Python 环境。
+
 ## Project Overview
 
 SEUOJ is a multi-service Online Judge system for Southeast University. This is the **deployment orchestration repo** — the four services live in Git submodules under `services/`. All inter-service communication is HTTP REST over a Docker bridge network; only Nginx (port 2280) is exposed to the host.
@@ -118,9 +120,18 @@ judgend:9090 ──> backend:8080     (PUT judge result callback)
 3. Compile → run each test case in Seccomp sandbox → check output (standard/special/interactive)
 4. PUT result back to backend callback endpoint → DB updated to FINISHED
 
+### Database initialization
+
+Schema DDL 唯一来源为后端子模块 `services/backend/sql/database_schema.sql`。docker-compose 通过单文件 volume mount 将其挂载为 `/docker-entrypoint-initdb.d/01-schema.sql`，deploy repo 不维护 schema 副本。
+
+- **Prod seed** (`data/init/02-seed.sql`): 最小必要数据 — 角色定义 + 默认管理员
+- **Dev seed** (`data/init-dev/02-seed.sql` ~ `07-*.sql`): 丰富测试数据，按功能分组（用户/题目/比赛/班级/作业/题单），dev compose override 覆盖 prod seed 并追加额外文件
+
+MySQL 首次启动时按文件名字母序执行 `/docker-entrypoint-initdb.d/` 下所有 `.sql`。`make dev_run` 每次清空 `data-dev/mysql` 以触发重新初始化。
+
 ### Data storage split
 
-- **MySQL** (`data/init/init.sql`): users, roles, problems metadata, submissions, contests, classes, tags
+- **MySQL**: users, roles, problems metadata, submissions, contests, classes, tags
 - **Judgend filesystem** (`data/judgend/`): problem content (problem.json), test data, checker binaries
 - **Agentend** (`data/agent/`): FAISS indexes, knowledge graph JSON, SQLite chat DB
 

@@ -1,8 +1,6 @@
-subtasks = []
-
 [problem_info]
-problem_type = "Special"
-checker_type = "Special"
+problem_type = "Standard"
+checker_type = "Standard"
 time_limit_ms = 1000
 memory_limit_kb = 262144
 
@@ -12,5 +10,33 @@ in_path = "1.in"
 ans_path = "1.ans"
 weight = 1.0
 
-[custom_modules]
-checker_path = "checker.cpp"
+[[testcases]]
+id = 2
+in_path = "2.in"
+ans_path = "2.ans"
+weight = 1.0
+
+[[testcases]]
+id = 3
+in_path = "3.in"
+ans_path = "3.ans"
+weight = 1.0
+
+[[testcases]]
+id = 4
+in_path = "4.in"
+ans_path = "4.ans"
+weight = 1.0
+
+[[testcases]]
+id = 5
+in_path = "5.in"
+ans_path = "5.ans"
+weight = 1.0
+
+[[subtasks]]
+id = 1
+cases = [1, 2, 3, 4, 5]
+pre_subtasks = []
+score = 100
+type = "min"
