@@ -1,0 +1,16 @@
+[
+  {
+    "chunk_id": 0,
+    "title": "示例文档",
+    "content": "这是一条用于启动的种子数据，实际使用时请替换为真实知识库。",
+    "metadata": {
+      "title": "示例文档"
+    },
+    "path_titles": [
+      "种子数据"
+    ],
+    "path_numbering": [
+      "1"
+    ]
+  }
+]

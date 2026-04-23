@@ -6,3 +6,4 @@ data/backend
 .codex
 agent_config.yaml
 data/agent
+.claude
