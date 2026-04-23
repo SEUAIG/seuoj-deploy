@@ -51,4 +51,20 @@ else
   echo "⚠️  $AGENT_SRC 不存在，跳过 agentend 种子数据拷贝"
 fi
 
+# --- backend 种子数据 (user-code) ---
+BACKEND_CODE_SRC="data/backend-seed/user-code"
+BACKEND_CODE_DST="$DEV_DATA/backend/data/user-code"
+
+if [[ -d "$BACKEND_CODE_SRC" ]]; then
+  mkdir -p "$BACKEND_CODE_DST"
+  if compgen -G "$BACKEND_CODE_SRC/*" > /dev/null; then
+    cp -r "$BACKEND_CODE_SRC"/* "$BACKEND_CODE_DST"/
+    echo "✅ backend user-code 种子拷贝完成: $BACKEND_CODE_SRC -> $BACKEND_CODE_DST"
+  else
+    echo "⚠️  $BACKEND_CODE_SRC 为空，跳过拷贝"
+  fi
+else
+  echo "⚠️  $BACKEND_CODE_SRC 不存在，跳过 backend 种子数据拷贝"
+fi
+
 echo "🎉 开发环境数据重置完成"

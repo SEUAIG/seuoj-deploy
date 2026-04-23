@@ -1,0 +1,9 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+// 迷宫寻路 - MLE
+int main() {
+    vector<int> v(500000000);  // ~2GB
+    cout << v[0] << endl;
+    return 0;
+}

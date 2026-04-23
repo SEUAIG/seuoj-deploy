@@ -1,0 +1,8 @@
+#include <stdio.h>
+// 最大子段和 - TLE
+int main() {
+    int a;
+    scanf("%d", &a);
+    while(1) a++;
+    return 0;
+}

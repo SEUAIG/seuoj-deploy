@@ -1,0 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+// 逆序对 - RE
+int main() {
+    int *p = NULL;
+    printf("%d\n", *p);  // null deref
+    return 0;
+}

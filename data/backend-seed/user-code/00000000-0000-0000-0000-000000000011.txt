@@ -1,0 +1,9 @@
+#include <iostream>
+using namespace std;
+// 数组求和 - wrong
+int main() {
+    int a, b;
+    cin >> a >> b;
+    cout << a - b << endl;  // bug: subtraction
+    return 0;
+}

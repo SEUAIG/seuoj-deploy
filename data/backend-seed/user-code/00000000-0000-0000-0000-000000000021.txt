@@ -1,0 +1,8 @@
+#include <stdio.h>
+// 区间求和 - wrong
+int main() {
+    int a, b;
+    scanf("%d %d", &a, &b);
+    printf("%d\n", a * b);  // wrong op
+    return 0;
+}

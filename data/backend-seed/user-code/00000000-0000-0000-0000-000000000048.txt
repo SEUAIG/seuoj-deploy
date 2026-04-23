@@ -1,0 +1,5 @@
+# 重排回文 - TLE
+import time
+a, b = map(int, input().split())
+while True:
+    pass

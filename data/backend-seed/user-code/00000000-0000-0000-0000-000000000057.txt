@@ -1,0 +1,3 @@
+# 岛屿计数 - wrong
+a, b = map(int, input().split())
+print(a - b)  # wrong
