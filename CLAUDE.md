@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+被指派任务时，在任务全部结束后，必须用中文报告 "所有任务已经完成"
+
 ## Project Overview
 
 SEUOJ is a multi-service Online Judge system for Southeast University. This is the **deployment orchestration repo** — the four services live in Git submodules under `services/`. All inter-service communication is HTTP REST over a Docker bridge network; only Nginx (port 2280) is exposed to the host.
@@ -14,14 +16,20 @@ git submodule update --init --recursive
 cp .env.example .env   # then edit .env
 # also create agent_config.yaml from services/seuoj-qa/config/example.yaml
 
-# Start everything (builds + runs all containers)
-make run            # or: docker compose up -d --build
+# Production start (data persists across restarts, uses data/ directory)
+make run                    # → http://localhost:2280
 
-# Dev start (copies judgend sample test data first)
-make dev_run
+# Dev/test start (resets ALL data on every run, uses data-dev/ directory)
+# - Wipes data-dev/mysql so MySQL init scripts (schema + seed) re-execute
+# - Copies seed data fresh into data-dev/judgend and data-dev/agent
+# - Completely isolated from production, different ports (2281/8443)
+make dev_run                # → http://localhost:2281
 
-# Stop
+# Stop (production)
 make down
+
+# Stop (dev)
+make dev_down
 
 # Logs
 docker compose logs -f backend
@@ -76,7 +84,7 @@ uvicorn src.api_server:app --host 0.0.0.0 --port 8002
 ## Architecture
 
 ```
-Browser :2280 ──> Nginx (frontend container)
+Browser :2280 (prod) / :2281 (dev) ──> Nginx (frontend container)
                     ├── /           static SPA files
                     ├── /api/*  ──> backend:8080   (Spring Boot)
                     └── /agent/* ─> agentend:8002  (FastAPI)
