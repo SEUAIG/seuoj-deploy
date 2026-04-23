@@ -3,7 +3,7 @@ USE seuoj;
 SET FOREIGN_KEY_CHECKS = 0;
 
 INSERT INTO `user_info` (id, username, nickname, email, password)
-VALUES (1, 'admin', '管理员', 'admin@seuoj.local', '$2a$10$JOD0yzajuN.zC5a2mUaw6uq05DHOeDka9VFM4UWj4xodHAtlvE1O.');
+VALUES (1, 'admin', '管理员', 'admin@seuoj.local', '$2a$10$W1EvyhCJ3455uIrlP70kguX.ZkxrtHpfVjmN7xbABb4p.OD7NNZrG');
 
 INSERT INTO `user_role` (id, role_code, role_name, is_del)
 VALUES (1, 'STUDENT', '学生', 0),

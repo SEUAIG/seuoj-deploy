@@ -5,16 +5,16 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- 用户：10 个，覆盖各角色
 -- 密码统一为 password123 的 bcrypt hash
 INSERT INTO `user_info` (id, username, nickname, email, password)
-VALUES (1,  'admin',    '超级管理员',  'admin@seuoj.local',     '$2a$10$d3qkMjKpTdxiIsmwk53MzuUojZVULOvaM0LGCkSfkfjJqh9tI0uFC'),
-       (2,  'manager',  '管理员',      'manager@seuoj.local',   '$2a$10$d3qkMjKpTdxiIsmwk53MzuUojZVULOvaM0LGCkSfkfjJqh9tI0uFC'),
-       (3,  'teacher1', '张老师',      'teacher1@seuoj.local',  '$2a$10$d3qkMjKpTdxiIsmwk53MzuUojZVULOvaM0LGCkSfkfjJqh9tI0uFC'),
-       (4,  'teacher2', '李老师',      'teacher2@seuoj.local',  '$2a$10$d3qkMjKpTdxiIsmwk53MzuUojZVULOvaM0LGCkSfkfjJqh9tI0uFC'),
-       (5,  'student1', '王同学',      'student1@seuoj.local',  '$2a$10$d3qkMjKpTdxiIsmwk53MzuUojZVULOvaM0LGCkSfkfjJqh9tI0uFC'),
-       (6,  'student2', '赵同学',      'student2@seuoj.local',  '$2a$10$d3qkMjKpTdxiIsmwk53MzuUojZVULOvaM0LGCkSfkfjJqh9tI0uFC'),
-       (7,  'student3', '孙同学',      'student3@seuoj.local',  '$2a$10$d3qkMjKpTdxiIsmwk53MzuUojZVULOvaM0LGCkSfkfjJqh9tI0uFC'),
-       (8,  'student4', '周同学',      'student4@seuoj.local',  '$2a$10$d3qkMjKpTdxiIsmwk53MzuUojZVULOvaM0LGCkSfkfjJqh9tI0uFC'),
-       (9,  'student5', '吴同学',      'student5@seuoj.local',  '$2a$10$d3qkMjKpTdxiIsmwk53MzuUojZVULOvaM0LGCkSfkfjJqh9tI0uFC'),
-       (10, 'student6', '郑同学',      'student6@seuoj.local',  '$2a$10$d3qkMjKpTdxiIsmwk53MzuUojZVULOvaM0LGCkSfkfjJqh9tI0uFC');
+VALUES (1,  'admin',    '超级管理员',  'admin@seuoj.local',     '$2a$10$W1EvyhCJ3455uIrlP70kguX.ZkxrtHpfVjmN7xbABb4p.OD7NNZrG'),
+       (2,  'manager',  '管理员',      'manager@seuoj.local',   '$2a$10$W1EvyhCJ3455uIrlP70kguX.ZkxrtHpfVjmN7xbABb4p.OD7NNZrG'),
+       (3,  'teacher1', '张老师',      'teacher1@seuoj.local',  '$2a$10$W1EvyhCJ3455uIrlP70kguX.ZkxrtHpfVjmN7xbABb4p.OD7NNZrG'),
+       (4,  'teacher2', '李老师',      'teacher2@seuoj.local',  '$2a$10$W1EvyhCJ3455uIrlP70kguX.ZkxrtHpfVjmN7xbABb4p.OD7NNZrG'),
+       (5,  'student1', '王同学',      'student1@seuoj.local',  '$2a$10$W1EvyhCJ3455uIrlP70kguX.ZkxrtHpfVjmN7xbABb4p.OD7NNZrG'),
+       (6,  'student2', '赵同学',      'student2@seuoj.local',  '$2a$10$W1EvyhCJ3455uIrlP70kguX.ZkxrtHpfVjmN7xbABb4p.OD7NNZrG'),
+       (7,  'student3', '孙同学',      'student3@seuoj.local',  '$2a$10$W1EvyhCJ3455uIrlP70kguX.ZkxrtHpfVjmN7xbABb4p.OD7NNZrG'),
+       (8,  'student4', '周同学',      'student4@seuoj.local',  '$2a$10$W1EvyhCJ3455uIrlP70kguX.ZkxrtHpfVjmN7xbABb4p.OD7NNZrG'),
+       (9,  'student5', '吴同学',      'student5@seuoj.local',  '$2a$10$W1EvyhCJ3455uIrlP70kguX.ZkxrtHpfVjmN7xbABb4p.OD7NNZrG'),
+       (10, 'student6', '郑同学',      'student6@seuoj.local',  '$2a$10$W1EvyhCJ3455uIrlP70kguX.ZkxrtHpfVjmN7xbABb4p.OD7NNZrG');
 
 INSERT INTO `user_role` (id, role_code, role_name, is_del)
 VALUES (1, 'STUDENT', '学生', 0),
