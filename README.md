@@ -61,6 +61,7 @@ docker compose logs -f
 ### 4) 访问
 - 前端入口：`http://localhost:2280`
 - API 入口：`http://localhost:2280/api/*`
+- 默认超级管理员：用户名 `superadmin`，密码 `password`，首次部署后请立即修改密码
 
 说明：`backend` 与 `judgend` 默认不对宿主机暴露端口，通过 Docker 内部网络通信。
 
@@ -108,6 +109,15 @@ make clean_data
 - `services/frontend`：前端源码与镜像构建上下文
 - `services/judgend`：判题端源码与镜像构建上下文
 - `services/seuoj-qa`：Agent 服务源码与镜像构建上下文
+
+## 开发模式
+
+开发/测试环境与生产环境完全隔离，每次启动重置所有数据。详见 [开发模式指南](docs/dev/README.md)。
+
+```bash
+make dev_run    # → http://localhost:2281
+make dev_down
+```
 
 ## 运维提示
 - 修改配置优先更新 `.env` 与 `docker-compose.base.yml`，避免在容器内手改。

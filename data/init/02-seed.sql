@@ -2,8 +2,9 @@ USE seuoj;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- 默认超级管理员，密码: password
 INSERT INTO `user_info` (id, username, nickname, email, password)
-VALUES (1, 'admin', '管理员', 'admin@seuoj.local', '$2a$10$W1EvyhCJ3455uIrlP70kguX.ZkxrtHpfVjmN7xbABb4p.OD7NNZrG');
+VALUES (1, 'superadmin', '超级管理员', 'superadmin@seuoj.com', '$2b$10$VmLiZ79E7flaf//Gmy7gFOMDnMDlV/IVIaexzZHcuCBYrrkPLvDci');
 
 INSERT INTO `user_role` (id, role_code, role_name, is_del)
 VALUES (1, 'STUDENT', '学生', 0),
