@@ -49,13 +49,7 @@ cp .env.example .env
 推荐使用：
 
 ```bash
-make run NAME=my_custom_ojname
-```
-
-查看日志：
-
-```bash
-docker compose logs -f
+make up NAME=my_custom_ojname
 ```
 
 ### 4) 访问
@@ -79,17 +73,29 @@ docker compose logs -f
 # 初始化目录与依赖（检查 .env / agent_config.yaml，准备 data 目录，拉取 aijlib）
 make ensure_dirs
 
-# 启动（默认）
-make run NAME=my_custom_ojname
+# 仅构建镜像
+make build
 
-# 开发启动
-make dev_run NAME=my_custom_ojname
+# 仅启动（不构建）
+make run
+
+# 构建并启动（首次部署或代码更新后推荐）
+make up
 
 # 停止
-make down NAME=my_custom_ojname
+make down
 
-# 开发停止
-make dev_down NAME=my_custom_ojname
+# 开发环境：仅构建
+make dev_build
+
+# 开发环境：仅启动（每次重置数据）
+make dev_run
+
+# 开发环境：构建并启动
+make dev_up
+
+# 开发环境：停止
+make dev_down
 
 # 清理数据目录（交互确认后删除）
 make clean_data
@@ -100,7 +106,7 @@ make clean_data
 - `docker-compose.pro.yml`：生产环境覆盖，重定向数据目录到 `data/`
 - `docker-compose.dev.yml`：开发环境覆盖，重定向数据目录到 `data-dev/` 并添加种子数据挂载
 - `nginx/default.conf`：Nginx 静态托管与反向代理配置
-- `Makefile`：常用运维命令封装（`run`/`dev_run`/`down`/`clean_data`）
+- `Makefile`：常用运维命令封装（`build`/`run`/`up`/`down`/`dev_build`/`dev_run`/`dev_up`/`dev_down`/`clean_data`）
 - `scripts/ensure_dirs.sh`：检查配置并初始化 `data` 目录与 `aijlib`
 - `scripts/copy_dev_assets.sh`：开发环境题目资源拷贝
 - `scripts/clean_data.sh`：交互式清理数据目录
@@ -115,7 +121,7 @@ make clean_data
 开发/测试环境与生产环境完全隔离，每次启动重置所有数据。详见 [开发模式指南](docs/dev/README.md)。
 
 ```bash
-make dev_run    # → http://localhost:2281
+make dev_up     # → http://localhost:2281
 make dev_down
 ```
 

@@ -19,13 +19,17 @@ cp .env.example .env   # then edit .env
 # also create agent_config.yaml from services/seuoj-qa/config/example.yaml
 
 # Production start (data persists across restarts, uses data/ directory)
-make run                    # → http://localhost:2280
+make up                     # → http://localhost:2280  (build + start)
+make run                    # start only (no build)
+make build                  # build only
 
 # Dev/test start (resets ALL data on every run, uses data-dev/ directory)
 # - Wipes data-dev/mysql so MySQL init scripts (schema + seed) re-execute
 # - Copies seed data fresh into data-dev/judgend and data-dev/agent
 # - Completely isolated from production, different ports (2281/8443)
-make dev_run                # → http://localhost:2281
+make dev_up                 # → http://localhost:2281  (build + start)
+make dev_run                # start only (no build, still resets data)
+make dev_build              # build only
 
 # Stop (production)
 make down

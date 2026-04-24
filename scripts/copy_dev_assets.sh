@@ -12,7 +12,7 @@ echo "🔄 重置开发环境数据 ($DEV_DATA)..."
 MYSQL_DIR="$DEV_DATA/mysql"
 if [[ -d "$MYSQL_DIR" ]]; then
   echo "🗑️  清空 MySQL 数据: $MYSQL_DIR"
-  sudo rm -rf "$MYSQL_DIR"
+  rm -rf "$MYSQL_DIR"
 fi
 mkdir -p "$MYSQL_DIR"
 echo "✅ MySQL 数据目录已重置"

@@ -7,8 +7,8 @@
 git submodule update --init --recursive
 cp .env.example .env   # 按需编辑
 
-# 启动开发环境（每次重置所有数据）
-make dev_run            # → http://localhost:2281
+# 启动开发环境（构建并启动，每次重置所有数据）
+make dev_up             # → http://localhost:2281
 
 # 停止
 make dev_down
@@ -16,7 +16,7 @@ make dev_down
 
 ## 开发模式与生产模式的区别
 
-| | 生产模式 (`make run`) | 开发模式 (`make dev_run`) |
+| | 生产模式 (`make up`) | 开发模式 (`make dev_up`) |
 |---|---|---|
 | 数据目录 | `data/` | `data-dev/` |
 | 前端端口 | 2280 | 2281 (HTTP) / 8443 (HTTPS) |
@@ -28,8 +28,14 @@ make dev_down
 ## 常用命令
 
 ```bash
-# 启动（每次重置数据，自动 --build）
+# 构建并启动（每次重置数据）
+make dev_up
+
+# 仅启动（不构建，仍重置数据）
 make dev_run
+
+# 仅构建镜像
+make dev_build
 
 # 停止
 make dev_down
@@ -39,7 +45,7 @@ docker compose -f docker-compose.base.yml -f docker-compose.dev.yml logs -f
 docker compose -f docker-compose.base.yml -f docker-compose.dev.yml logs -f backend
 ```
 
-## 每次 `make dev_run` 的执行流程
+## 每次 `make dev_up` / `make dev_run` 的执行流程
 
 1. **`ensure_dirs`** — 检查 `.env`、`agent_config.yaml` 是否存在，创建数据子目录
 2. **`copy_dev_assets`**（`scripts/copy_dev_assets.sh`）：
@@ -47,7 +53,8 @@ docker compose -f docker-compose.base.yml -f docker-compose.dev.yml logs -f back
    - 从 `data/judgend-seed/` 拷贝题目测试数据到 `data-dev/judgend/`
    - 从 `data/agent-seed/` 拷贝 Agent 数据到 `data-dev/agent/`
    - 从 `data/backend-seed/user-code/` 拷贝提交代码到 `data-dev/backend/data/user-code/`
-3. **启动容器**（`docker compose ... up -d --build`）
+3. **构建镜像**（仅 `dev_up`）
+4. **启动容器**（`docker compose ... up -d`）
    - MySQL 首次启动时按文件名顺序执行 `/docker-entrypoint-initdb.d/` 下的 SQL
 
 ## 数据库初始化
