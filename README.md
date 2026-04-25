@@ -13,19 +13,15 @@
 
 ## 快速开始
 
-### 1) 准备子模块
+### 1) 初始化
 本仓库的 `services/*` 是 Git Submodule，首次拉取后需初始化：
 
 ```bash
-git submodule update --init --recursive
+make init 
 ```
 
 ### 2) 准备环境变量
-复制模板并按需修改：
-
-```bash
-cp .env.example .env
-```
+在 `.env` `agent_config ` (初始化阶段自动生成) 按需修改：
 
 至少确认以下变量：
 - `DB_ROOT_PASSWORD`

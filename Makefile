@@ -1,4 +1,4 @@
-.PHONY: ensure_dirs copy_dev_assets build run up dev_build dev_run dev_up down dev_down clean_data
+.PHONY: ensure_dirs copy_dev_assets build run up dev_build dev_run dev_up down dev_down clean_data init
 
 NAME ?=
 COMPOSE_PRO = docker compose -f docker-compose.base.yml -f docker-compose.pro.yml $(if $(NAME),-p $(NAME),)
@@ -42,3 +42,8 @@ dev_down:
 
 clean_data:
 	bash ./scripts/clean_data.sh
+
+init:
+	git submodule update --init --recursive
+	cp .env.example .env
+	cp agent_config.yaml.example agent_config.yaml

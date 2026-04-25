@@ -193,13 +193,13 @@ memory_limit_kb = 262144        # 内存限制（KB），默认 256MB
 id = 1
 in_path = "1.in"                # 输入文件路径（相对于 data/ 目录）
 ans_path = "1.ans"              # 期望输出文件路径（相对于 data/ 目录）
-weight = 1.0                    # 权重（所有测试点按权重比例计分）
+weight = 1                    # 权重（所有测试点按权重比例计分）
 
 [[testcases]]
 id = 2
 in_path = "2.in"
 ans_path = "2.ans"
-weight = 1.0
+weight = 1
 ```
 
 ### 带 Subtask 的配置
@@ -217,25 +217,25 @@ memory_limit_kb = 524288
 id = 1
 in_path = "1.in"
 ans_path = "1.ans"
-weight = 1.0
+weight = 1
 
 [[testcases]]
 id = 2
 in_path = "2.in"
 ans_path = "2.ans"
-weight = 1.0
+weight = 1
 
 [[testcases]]
 id = 3
 in_path = "3.in"
 ans_path = "3.ans"
-weight = 1.0
+weight = 1
 
 [[testcases]]
 id = 4
 in_path = "4.in"
 ans_path = "4.ans"
-weight = 1.0
+weight = 1
 
 # Subtask 1: 小数据（30分）
 [[subtasks]]
@@ -269,7 +269,7 @@ type = "min"
 id = 5
 in_path = "5.in"
 ans_path = "5.ans"
-weight = 1.0
+weight = 1
 time_limit_ms = 3000     # 覆盖全局时限
 memory_limit_kb = 524288  # 覆盖全局内存限制
 ```

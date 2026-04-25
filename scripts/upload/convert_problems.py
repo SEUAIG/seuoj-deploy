@@ -249,7 +249,7 @@ def generate_info_toml(
         lines.append(f"id = {tc['id']}")
         lines.append(f'in_path = "{tc["in_path"]}"')
         lines.append(f'ans_path = "{tc["ans_path"]}"')
-        lines.append("weight = 1.0")
+        lines.append("weight = 1")
         lines.append("")
 
     return "\n".join(lines)
