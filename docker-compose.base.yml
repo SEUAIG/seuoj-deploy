@@ -4,18 +4,22 @@ services:
     build: ./services/judgend
     # 判题端不需要暴露端口到外部，仅内部互访
     environment:
+      - TZ=Asia/Shanghai
       - AIJ_MAX_CONCURRENT_REQUESTS=${JUDGEND_MAX_CONCURRENT_REQUESTS}
       - AIJ_BACKEND_HOST=backend
       - AIJ_OUTPUT_TRUNCATE_LENGTH=${JUDGEND_OUTPUT_TRUNCATE_LENGTH}
     # Agent
   agentend:
     build: ./services/seuoj-qa
+    environment:
+      - TZ=Asia/Shanghai
     volumes:
       - ./agent_config.yaml:/app/config/base.yaml:ro
   # 数据库服务
   mysql:
     image: mysql:8.0
     environment:
+      - TZ=Asia/Shanghai
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
       - MYSQL_DATABASE=seuoj
     volumes:
@@ -28,6 +32,7 @@ services:
     build: ./services/backend
     environment:
       # 应用配置
+      - TZ=Asia/Shanghai
       - SPRING_APPLICATION_NAME=seuoj-backend
       - SPRING_PROFILES_ACTIVE=dev
       - LOGGING_FILE_NAME=/app/log/backend.log
@@ -90,6 +95,8 @@ services:
   # 前端 + Nginx
   frontend:
     build: ./services/frontend
+    environment:
+      - TZ=Asia/Shanghai
     depends_on:
       - backend
       - judgend
