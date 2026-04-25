@@ -25,7 +25,7 @@ def make_info_toml(problem_type, checker_type, n_cases, time_ms=1000, mem_kb=262
              f'memory_limit_kb = {mem_kb}', '']
     for i in range(1, n_cases + 1):
         lines += [f'[[testcases]]', f'id = {i}', f'in_path = "{i}.in"',
-                  f'ans_path = "{i}.ans"', f'weight = 1.0', '']
+                  f'ans_path = "{i}.ans"', f'weight = 1', '']
     lines += [f'[[subtasks]]', f'id = 1',
               f'cases = [{", ".join(str(i) for i in range(1, n_cases + 1))}]',
               f'pre_subtasks = []', f'score = 100', f'type = "min"']

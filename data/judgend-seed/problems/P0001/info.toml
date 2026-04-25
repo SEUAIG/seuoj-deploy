@@ -8,31 +8,31 @@ memory_limit_kb = 262144
 id = 1
 in_path = "1.in"
 ans_path = "1.ans"
-weight = 1.0
+weight = 10
 
 [[testcases]]
 id = 2
 in_path = "2.in"
 ans_path = "2.ans"
-weight = 1.0
+weight = 10
 
 [[testcases]]
 id = 3
 in_path = "3.in"
 ans_path = "3.ans"
-weight = 1.0
+weight = 10
 
 [[testcases]]
 id = 4
 in_path = "4.in"
 ans_path = "4.ans"
-weight = 1.0
+weight = 10
 
 [[testcases]]
 id = 5
 in_path = "5.in"
 ans_path = "5.ans"
-weight = 1.0
+weight = 60
 
 [[subtasks]]
 id = 1
