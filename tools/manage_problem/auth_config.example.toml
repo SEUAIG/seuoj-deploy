@@ -1,0 +1,6 @@
+# 认证配置示例
+# 先复制为 auth_config.toml，再运行 `python3 main.py login`
+baseurl = "http://127.0.0.1:8080"
+identifier = "testu@seuoj.com"
+password = "password"
+jwt = ""

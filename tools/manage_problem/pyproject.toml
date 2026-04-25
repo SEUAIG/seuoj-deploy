@@ -1,0 +1,9 @@
+[project]
+name = "formatted-problems"
+version = "0.1.0"
+description = "题目批量工具"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "typer>=0.24.2",
+]
