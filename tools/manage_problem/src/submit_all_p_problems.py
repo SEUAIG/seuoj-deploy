@@ -172,22 +172,26 @@ def fetch_next_pid(base_url: str, token: str, timeout: int) -> str:
 
 
 def normalize_p_pid(pid: str) -> str:
-    """将任意 pid 规范化为 P 前缀。"""
+    """将任意 pid 规范化为 P 前缀，并保留数字部分前导 0。"""
     normalized = pid.strip().upper()
     match = re.search(r"(\d+)", normalized)
     if not match:
         raise ValueError(f"非法 pid 格式: {pid}")
     number = match.group(1)
-    return f"P{int(number)}"
+    return f"P{number}"
 
 
 def increment_pid(pid: str) -> str:
-    """将 pid 规范为 P 前缀并自增 1。"""
+    """将 pid 规范为 P 前缀并自增 1，尽量保留原有数字宽度。"""
     normalized = normalize_p_pid(pid)
     match = re.fullmatch(r"P(\d+)", normalized)
     if not match:
         raise ValueError(f"非法 pid 格式: {pid}")
-    return f"P{int(match.group(1)) + 1}"
+    number_text = match.group(1)
+    width = len(number_text)
+    next_number = int(number_text) + 1
+    next_text = str(next_number).zfill(width)
+    return f"P{next_text}"
 
 
 def append_success_pid(file_path: Path, folder_name: str, pid: str) -> None:
@@ -218,6 +222,24 @@ def post_problem(base_url: str, token: str, payload: Dict, timeout: int) -> Tupl
     data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
 
     req = urllib.request.Request(url=url, data=data, method="POST")
+    req.add_header("Authorization", f"Bearer {token}")
+    req.add_header("Content-Type", "application/json")
+
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            body = resp.read().decode("utf-8", errors="replace")
+            return resp.status, body
+    except urllib.error.HTTPError as err:
+        body = err.read().decode("utf-8", errors="replace")
+        return err.code, body
+
+
+def patch_problem(base_url: str, token: str, payload: Dict, timeout: int) -> Tuple[int, str]:
+    """向接口更新单题并返回状态码和响应文本。"""
+    url = base_url.rstrip("/") + "/api/problem/edit"
+    data = json.dumps(payload, ensure_ascii=False).encode("utf-8")
+
+    req = urllib.request.Request(url=url, data=data, method="PATCH")
     req.add_header("Authorization", f"Bearer {token}")
     req.add_header("Content-Type", "application/json")
 
