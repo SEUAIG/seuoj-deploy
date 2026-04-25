@@ -13,7 +13,7 @@ DIRS=(
   "$DATA_DIR/judgend"
 )
 
-AIJLIB_DIR="$DATA_DIR/judgend/aijlib"
+AIJLIB_DIR="$DATA_DIR/judgend/testlib"
 AIJLIB_REPO="https://github.com/SEUAIG/aijlib.git"
 
 echo "🔍 检查必要文件..."
