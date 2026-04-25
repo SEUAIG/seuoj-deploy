@@ -25,7 +25,7 @@ git submodule update --init --recursive
 
 ```bash
 cp .env.example .env
-cp services/seuoj-qa/config/example.yaml agent_config.yaml
+cp agent_config.yaml.example agent_config.yaml
 ```
 
 至少确认以下变量：
