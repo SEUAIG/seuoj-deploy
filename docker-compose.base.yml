@@ -54,6 +54,9 @@ services:
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE=true
       # 代码存储配置
       - STORAGE_USER_CODE_STORAGE_PATH=/app/data/user-code
+      - STORAGE_IMAGE_PATH=/app/data/images
+      - STORAGE_MAX_FILE_SIZE=20971520
+      - STORAGE_ALLOWED_MIME_TYPES=image/jpeg,image/png,image/webp,image/gif
       # MyBatis Plus 配置
       - MYBATIS_PLUS_CONFIGURATION_MAP_UNDERSCORE_TO_CAMEL_CASE=true
       - MYBATIS_PLUS_GLOBAL_CONFIG_DB_CONFIG_LOGIC_DELETE_FIELD=is_del
