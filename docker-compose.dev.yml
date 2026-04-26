@@ -10,7 +10,9 @@
 services:
   judgend:
     volumes:
-      - ./data-dev/judgend:/app/assets
+      - ./data-dev/judgend/logs:/app/assets/logs
+      - ./data-dev/judgend/problems:/app/assets/problems
+      - ./data-dev/judgend/submissions:/app/assets/submissions
 
   agentend:
     volumes:
@@ -35,5 +37,4 @@ services:
 
   frontend:
     ports:
-      - "2281:80"
-      - "8443:443"
+      - "${DEV_HTTP_PORT:-2281}:80"

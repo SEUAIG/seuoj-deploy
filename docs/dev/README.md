@@ -8,7 +8,9 @@ git submodule update --init --recursive
 cp .env.example .env   # 按需编辑
 
 # 启动开发环境（构建并启动，每次重置所有数据）
-make dev_up             # → http://localhost:2281
+make dev_up             # -> http://localhost:2281
+# 多实例避免端口冲突（示例）
+NAME=devoj DEV_HTTP_PORT=2381 make dev_up
 
 # 停止
 make dev_down

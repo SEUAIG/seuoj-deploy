@@ -7,7 +7,9 @@
 services:
   judgend:
     volumes:
-      - ./data/judgend:/app/assets
+      - ./data/judgend/logs:/app/assets/logs
+      - ./data/judgend/problems:/app/assets/problems
+      - ./data/judgend/submissions:/app/assets/submissions
 
   agentend:
     volumes:

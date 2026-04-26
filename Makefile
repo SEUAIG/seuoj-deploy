@@ -1,4 +1,4 @@
-.PHONY: ensure_dirs copy_dev_assets build run up dev_build dev_run dev_up down dev_down clean_data init
+.PHONY: ensure_dirs ensure_dev_dirs copy_dev_assets build run up dev_build dev_run dev_up down dev_down clean_data init
 
 NAME ?=
 COMPOSE_PRO = docker compose -f docker-compose.base.yml -f docker-compose.pro.yml $(if $(NAME),-p $(NAME),)
@@ -7,7 +7,10 @@ COMPOSE_DEV = docker compose -f docker-compose.base.yml -f docker-compose.dev.ym
 ensure_dirs:
 	bash ./scripts/ensure_dirs.sh
 
-copy_dev_assets: ensure_dirs
+ensure_dev_dirs:
+	bash ./scripts/ensure_dirs.sh data-dev
+
+copy_dev_assets: ensure_dev_dirs
 	bash ./scripts/copy_dev_assets.sh
 
 # ---------- 生产环境 ----------
@@ -26,7 +29,7 @@ down:
 
 # ---------- 开发环境 ----------
 
-dev_build: ensure_dirs
+dev_build: ensure_dev_dirs
 	$(COMPOSE_DEV) build
 
 dev_run: copy_dev_assets

@@ -8,14 +8,8 @@ DEV_DATA="data-dev"
 
 echo "🔄 重置开发环境数据 ($DEV_DATA)..."
 
-# --- 重置 MySQL 数据（触发 init 脚本重新执行） ---
-MYSQL_DIR="$DEV_DATA/mysql"
-if [[ -d "$MYSQL_DIR" ]]; then
-  echo "🗑️  清空 MySQL 数据: $MYSQL_DIR"
-  rm -rf "$MYSQL_DIR"
-fi
-mkdir -p "$MYSQL_DIR"
-echo "✅ MySQL 数据目录已重置"
+chmod +x scripts/clean_data.sh
+./scripts/clean_data.sh
 
 # --- judgend 种子数据 ---
 JUDGE_SRC="data/judgend-seed"

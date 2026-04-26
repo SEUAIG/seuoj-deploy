@@ -42,17 +42,4 @@ done
 
 echo "✅ 目录检查完成"
 
-# ===== 拉取 aijlib =====
-echo "📦 准备 aijlib..."
-
-if [[ -d "$AIJLIB_DIR/.git" ]]; then
-  echo "🔄 已存在仓库，执行 git pull..."
-  git -C "$AIJLIB_DIR" pull
-elif [[ -d "$AIJLIB_DIR" ]]; then
-  echo "⚠️  $AIJLIB_DIR 已存在但不是 git 仓库，跳过（请手动处理）"
-else
-  echo "⬇️  克隆 aijlib..."
-  git clone "$AIJLIB_REPO" "$AIJLIB_DIR" --depth 1
-fi
-
 echo "🎉 初始化完成"

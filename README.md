@@ -117,7 +117,9 @@ make clean_data
 开发/测试环境与生产环境完全隔离，每次启动重置所有数据。详见 [开发模式指南](docs/dev/README.md)。
 
 ```bash
-make dev_up     # → http://localhost:2281
+make dev_up     # -> http://localhost:2281
+# 多实例避免端口冲突（示例）
+NAME=devoj DEV_HTTP_PORT=2381 make dev_up
 make dev_down
 ```
 
