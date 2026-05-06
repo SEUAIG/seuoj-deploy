@@ -32,10 +32,10 @@ down:
 dev_build: ensure_dev_dirs
 	$(COMPOSE_DEV) build
 
-dev_run: copy_dev_assets
+dev_run: dev_down copy_dev_assets
 	$(COMPOSE_DEV) up -d
 
-dev_up: dev_build copy_dev_assets
+dev_up: dev_down dev_build copy_dev_assets
 	$(COMPOSE_DEV) up -d
 
 dev_down:
