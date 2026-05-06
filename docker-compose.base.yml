@@ -14,7 +14,8 @@ services:
     environment:
       - TZ=Asia/Shanghai
     volumes:
-      - ./agent_config.yaml:/app/config/base.yaml:ro
+      - ./config/agent_config.yaml:/app/config/base.yaml:ro
+      - ./config/prompts.yaml:/app/config/prompts.yaml:ro
   # 数据库服务
   mysql:
     image: mysql:8.0

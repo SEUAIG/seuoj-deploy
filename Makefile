@@ -49,4 +49,5 @@ clean_data:
 init:
 	git submodule update --init --recursive
 	cp .env.example .env
-	cp agent_config.yaml.example agent_config.yaml
+	cp config/agent_config.yaml.example config/agent_config.yaml
+	cp config/prompts.yaml.examle config/prompts.yaml

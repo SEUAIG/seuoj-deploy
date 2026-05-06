@@ -4,7 +4,7 @@ data/judgend
 data/backend
 .env
 .codex
-agent_config.yaml
+config/*.yaml
 data/agent
 data-dev/
 .claude

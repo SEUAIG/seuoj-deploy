@@ -6,7 +6,7 @@
 - `mysql`：`mysql:8.0`，初始化脚本来自 `data/init`
 - `backend`：Spring Boot 服务（容器内 `8080`），依赖 `mysql` 与 `judgend`
 - `judgend`：评测服务（容器内 `9090`），仅内部网络访问
-- `agentend`：智能问答/Agent 服务，读取 `agent_config.yaml` 和 `data/agent`
+- `agentend`：智能问答/Agent 服务，读取 `config/agent_config.yaml`、`config/prompts.yaml` 和 `data/agent`
 - `frontend`：Nginx 提供静态资源并反代 `/api` 到 `backend`
 
 服务定义见 `docker-compose.yml`，Nginx 配置见 `nginx/default.conf`。
@@ -21,7 +21,7 @@ make init
 ```
 
 ### 2) 准备环境变量
-在 `.env` `agent_config ` (初始化阶段自动生成) 按需修改：
+在 `.env`、`config/agent_config.yaml`、`config/prompts.yaml` (初始化阶段自动生成) 按需修改：
 
 至少确认以下变量：
 - `DB_ROOT_PASSWORD`
@@ -37,8 +37,9 @@ make init
 - `VERIFICATION_DEV_FIXED_CODE_ENABLED`
 - `VERIFICATION_DEV_FIXED_CODE`
 
-并确保根目录存在：
-- `agent_config.yaml`
+并确保 `config/` 目录存在：
+- `config/agent_config.yaml`
+- `config/prompts.yaml`
 
 ### 3) 启动
 
@@ -66,7 +67,7 @@ make up NAME=my_custom_ojname
 ## 常用命令
 
 ```bash
-# 初始化目录与依赖（检查 .env / agent_config.yaml，准备 data 目录，拉取 aijlib）
+# 初始化目录与依赖（检查 .env / config/*.yaml，准备 data 目录，拉取 aijlib）
 make ensure_dirs
 
 # 仅构建镜像

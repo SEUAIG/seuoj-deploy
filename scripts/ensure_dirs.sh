@@ -3,7 +3,9 @@ set -euo pipefail
 
 DATA_DIR="${1:-data}"
 
-CONFIG_FILE="agent_config.yaml"
+CONFIG_DIR="config"
+AGENT_CONFIG_FILE="$CONFIG_DIR/agent_config.yaml"
+PROMPTS_CONFIG_FILE="$CONFIG_DIR/prompts.yaml"
 ENV_FILE=".env"
 
 DIRS=(
@@ -18,8 +20,13 @@ AIJLIB_REPO="https://github.com/SEUAIG/aijlib.git"
 
 echo "🔍 检查必要文件..."
 
-if [[ ! -f "$CONFIG_FILE" ]]; then
-  echo "❌ Error: $CONFIG_FILE 不存在"
+if [[ ! -f "$AGENT_CONFIG_FILE" ]]; then
+  echo "❌ Error: $AGENT_CONFIG_FILE 不存在"
+  exit 1
+fi
+
+if [[ ! -f "$PROMPTS_CONFIG_FILE" ]]; then
+  echo "❌ Error: $PROMPTS_CONFIG_FILE 不存在"
   exit 1
 fi
 
