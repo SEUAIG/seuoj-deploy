@@ -10,3 +10,5 @@ data-dev/
 .claude
 .venv
 __pycache__/
+
+agent_config.yaml
