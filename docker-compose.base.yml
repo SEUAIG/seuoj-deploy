@@ -8,6 +8,17 @@ services:
       - AIJ_MAX_CONCURRENT_REQUESTS=${JUDGEND_MAX_CONCURRENT_REQUESTS}
       - AIJ_BACKEND_HOST=backend
       - AIJ_OUTPUT_TRUNCATE_LENGTH=${JUDGEND_OUTPUT_TRUNCATE_LENGTH}
+      - AIJ_COMPILE_TIME_LIMIT_MS=${JUDGEND_COMPILE_TIME_LIMIT_MS}
+      - AIJ_COMPILE_MEMORY_LIMIT_KB=${JUDGEND_COMPILE_MEMORY_LIMIT_KB}
+      - AIJ_COMPILE_ERROR_TRUNCATE_LENGTH=${JUDGEND_COMPILE_ERROR_TRUNCATE_LENGTH}
+    deploy:
+      resources:
+        limits:
+          cpus: "32"
+          memory: 24G
+        reservations:
+          cpus: "4"
+          memory: 4G
     # Agent
   agentend:
     build: ./services/seuoj-qa
