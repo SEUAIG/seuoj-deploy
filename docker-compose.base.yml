@@ -84,6 +84,8 @@ services:
       # 评测服务配置
       - JUDGE_SERVER_URL=http://judgend:9090
       - JUDGE_SECRET=${JUDGE_SECRET}
+      # Agent 服务配置
+      - AGENT_SERVER_URL=http://agentend:8002
       # 评测服务测试用例配置
       - PROBLEM_TESTCASE_MAX_ARCHIVE_SIZE=52428800
       - PROBLEM_TESTCASE_MAX_ENTRY_COUNT=200

@@ -17,7 +17,7 @@ services:
   agentend:
     volumes:
       - ./data-dev/agent:/app/data
-
+      - ./prompts.yaml:/app/config/prompts.yaml
   mysql:
     volumes:
       - ./data-dev/mysql:/var/lib/mysql
