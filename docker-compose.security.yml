@@ -1,0 +1,7 @@
+# Apply after the normal production overrides. Keep the compiler budget equal
+# to the development environment verified with Node 24 and Go 1.26.
+# Submission execution limits continue to come from each problem's settings.
+services:
+  judgend:
+    environment:
+      AIJ_COMPILE_MEMORY_LIMIT_KB: 1048576
