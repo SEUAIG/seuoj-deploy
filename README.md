@@ -1,5 +1,7 @@
 # SEUOJ 部署仓库
 
+**现有生产服务器维护请先阅读 [DEPLOYMENT-SCHOOL.md](DEPLOYMENT-SCHOOL.md) 和 [本次整理记录](docs/production-reconciliation-20261110.md)。请勿在已有生产目录运行初始化命令覆盖配置。**
+
 本仓库使用 Docker Compose 编排并部署 SEUOJ 的完整服务栈：`MySQL`、`backend`（Spring Boot）、`judgend`（Rust 判题端）、`agentend`（QA/Agent 服务）、`frontend`（Vite 构建 + Nginx 托管）。
 
 ## 服务架构
@@ -9,7 +11,7 @@
 - `agentend`：智能问答/Agent 服务，读取 `config/agent_config.yaml`、`config/prompts.yaml` 和 `data/agent`
 - `frontend`：Nginx 提供静态资源并反代 `/api` 到 `backend`
 
-服务定义见 `docker-compose.yml`，Nginx 配置见 `nginx/default.conf`。
+服务定义见 `docker-compose.base.yml` 与生产覆盖层，Nginx 配置见 `nginx/core.conf`、`nginx/core-tls.conf`。
 
 ## 快速开始
 
