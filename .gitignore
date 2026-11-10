@@ -34,3 +34,6 @@ backups/
 *.log
 data/certs/
 data/maintenance-*/
+
+# Other virtual hosts sharing this machine are managed locally.
+/nginx/local-vhosts/
