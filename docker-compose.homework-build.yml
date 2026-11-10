@@ -1,0 +1,6 @@
+# Compatibility overlay: builds the portable, complete judge image.
+# Historical Dockerfile.homework depended on machine-local cached images.
+services:
+  judgend:
+    build:
+      dockerfile: Dockerfile

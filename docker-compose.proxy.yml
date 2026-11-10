@@ -1,0 +1,51 @@
+x-proxy-build-args: &proxy-build-args
+  HTTP_PROXY: ${HTTP_PROXY:-}
+  HTTPS_PROXY: ${HTTPS_PROXY:-}
+  NO_PROXY: ${NO_PROXY:-}
+  http_proxy: ${http_proxy:-}
+  https_proxy: ${https_proxy:-}
+  no_proxy: ${no_proxy:-}
+
+services:
+  judgend:
+    restart: unless-stopped
+    build:
+      context: ./services/judgend
+      network: host
+      args: *proxy-build-args
+
+  agentend:
+    profiles:
+      - ai
+    build:
+      context: ./services/seuoj-qa
+      network: host
+      args: *proxy-build-args
+
+  backend:
+    restart: unless-stopped
+    build:
+      context: ./services/backend
+      network: host
+      args: *proxy-build-args
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      VERIFICATION_DEV_FIXED_CODE_ENABLED: "false"
+
+  frontend:
+    restart: unless-stopped
+    build:
+      context: ./services/frontend
+      network: host
+      args: *proxy-build-args
+    depends_on: !override
+      - backend
+      - judgend
+    volumes: !override
+      - ./nginx/core.conf:/etc/nginx/conf.d/default.conf:ro
+    ports: !override
+      - "80:80"
+      - "2280:80"
+
+  mysql:
+    restart: unless-stopped

@@ -1,0 +1,20 @@
+# docker-compose.tls.yml
+# HTTPS 入口覆盖层
+#
+# 用法（必须放在 docker-compose.proxy.yml 之后，否则端口映射会被其 !override 盖回去）：
+#   docker compose -f docker-compose.base.yml -f docker-compose.pro.yml \
+#                  -f docker-compose.proxy.yml -f docker-compose.tls.yml up -d --no-build
+#
+# 证书由宿主机的 acme.sh 签发并安装到 ./data/certs/，续期后自动 reload nginx。
+# 去掉这一层即可回退到纯 HTTP 的 2280 入口。
+services:
+  frontend:
+    volumes: !override
+      - ./nginx/core-tls.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/locations.inc:/etc/nginx/conf.d/locations.inc:ro
+      - ./data/certs:/etc/nginx/certs:ro
+      - ./nginx/local-vhosts:/etc/nginx/local-vhosts:ro
+    ports: !override
+      - "80:80"
+      - "443:443"
+      - "2280:80"
