@@ -64,6 +64,13 @@ services:
       - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH=true
       - SPRING_MAIL_PROPERTIES_MAIL_SMTP_SSL_ENABLE=true
+      # 主发信通道 Resend；当场失败时自动改用上面的 QQ 通道并告警
+      - APP_MAIL_PRIMARY_HOST=smtp.resend.com
+      - APP_MAIL_PRIMARY_PORT=465
+      - APP_MAIL_PRIMARY_USERNAME=resend
+      - APP_MAIL_PRIMARY_PASSWORD=${RESEND_API_KEY}
+      - APP_MAIL_PRIMARY_FROM=SEUOJ <noreply@seuoj.best>
+      - APP_MAIL_ALERT_TO=${MAIL_ALERT_TO}
       # 代码存储配置
       - STORAGE_USER_CODE_STORAGE_PATH=/app/data/user-code
       - STORAGE_IMAGE_PATH=/app/data/images
