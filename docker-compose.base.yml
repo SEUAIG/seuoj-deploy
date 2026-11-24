@@ -11,11 +11,14 @@ services:
       - AIJ_COMPILE_TIME_LIMIT_MS=${JUDGEND_COMPILE_TIME_LIMIT_MS}
       - AIJ_COMPILE_MEMORY_LIMIT_KB=${JUDGEND_COMPILE_MEMORY_LIMIT_KB}
       - AIJ_COMPILE_ERROR_TRUNCATE_LENGTH=${JUDGEND_COMPILE_ERROR_TRUNCATE_LENGTH}
+    init: true
+    cpuset: "48-95"
     deploy:
       resources:
         limits:
           cpus: "48"
           memory: 48G
+          pids: 4096
         reservations:
           cpus: "4"
           memory: 4G
@@ -46,7 +49,7 @@ services:
       # 应用配置
       - TZ=Asia/Shanghai
       - SPRING_APPLICATION_NAME=seuoj-backend
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=prod
       - LOGGING_FILE_NAME=/app/log/backend.log
       - LOGGING_LOGBACK_ROLLINGPOLICY_MAX_FILE_SIZE=10MB
       - LOGGING_LOGBACK_ROLLINGPOLICY_MAX_HISTORY=7
@@ -57,6 +60,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=${DB_ROOT_PASSWORD}
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
+      - SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE=32
+      - SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE=8
       # 邮件配置
       - SPRING_MAIL_HOST=smtp.qq.com
       - SPRING_MAIL_PORT=465
@@ -82,7 +87,7 @@ services:
       - MYBATIS_PLUS_GLOBAL_CONFIG_DB_CONFIG_LOGIC_DELETE_VALUE=1
       - MYBATIS_PLUS_GLOBAL_CONFIG_DB_CONFIG_LOGIC_NOT_DELETE_VALUE=0
       - MYBATIS_PLUS_MAPPER_LOCATIONS=classpath:/mapper/**/*.xml
-      - MYBATIS_PLUS_LOG_IMPL=org.apache.ibatis.logging.stdout.StdOutImpl
+      - MYBATIS_PLUS_CONFIGURATION_LOG_IMPL=org.apache.ibatis.logging.nologging.NoLoggingImpl
       # JWT 配置
       - JWT_PRIVATE_KEY=${JWT_PRIVATE_KEY}
       - JWT_PUBLIC_KEY=${JWT_PUBLIC_KEY}
@@ -113,6 +118,10 @@ services:
       - STORAGE_UPLOAD_MAX_FILE_SIZE=209715200
       - SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE=200MB
       - SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE=500MB
+    deploy:
+      resources:
+        limits:
+          memory: 4G
     depends_on:
       - mysql
 
